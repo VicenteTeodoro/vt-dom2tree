@@ -3,11 +3,13 @@ const path = require('path');
 module.exports = {
   entry: './src/index.js',
   mode: 'development',
+  target: 'node',
   output: {
     filename: 'vt-dom2tree.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'var',
-    library: 'vtDom2Tree'
+    library: 'vtDom2Tree',
+    libraryTarget: 'umd',
+    libraryExport: 'default'
   },
   devServer: {
     contentBase: './',

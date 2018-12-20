@@ -79,4 +79,3 @@ export default class Tree {
     return this._nodes;
   }
 }
-export { Tree, xpath };
