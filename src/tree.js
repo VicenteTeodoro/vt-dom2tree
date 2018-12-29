@@ -22,13 +22,13 @@ export default class Tree {
     var box = {
       x: evt.x - this._canvas.getBoundingClientRect().x,
       y: evt.y - this._canvas.getBoundingClientRect().y
-    }
+    };
     Tree.nodes.forEach((n) => {
       if (n.isOver(box)) {
-        n.color = "#FF0000";
+        n.color = '#FF0000';
         n.draw(true);
-      } else if (n.color !== "#0000FF") {
-        n.color = "#0000FF";
+      } else if (n.color !== '#0000FF') {
+        n.color = '#0000FF';
         n.draw(true);
       }
     });
@@ -39,7 +39,7 @@ export default class Tree {
     let box = {
       x: evt.x - this._canvas.getBoundingClientRect().x,
       y: evt.y - this._canvas.getBoundingClientRect().y
-    }
+    };
     Tree.nodes.forEach((n) => {
       if (n.isOver(box)) {
         node = n;

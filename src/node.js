@@ -2,7 +2,7 @@ import Tree from './tree';
 export default class Node {
   constructor(data, parent, nth, ctx) {
     this._ctx = ctx;
-    this.color = "#0000FF";
+    this.color = '#0000FF';
     this._ctx.strokeStyle = this.color;
     this._ctx.moveTo(0, 0);
 
@@ -20,9 +20,9 @@ export default class Node {
 
     if (!this._data.c) { return; }
     this._data.c.forEach((n, i) => {
-      var n = new Node(n, this, i, this._ctx);
-      n.draw();
-      Tree.nodes.push(n);
+      var node = new Node(n, this, i, this._ctx);
+      node.draw();
+      Tree.nodes.push(node);
     });
   }
   static get height() {
@@ -36,7 +36,7 @@ export default class Node {
     this._ctx.strokeStyle = this.color;
     if (jumpConnector !== true) { this._drawConnector(); }
     if (this._data.s === true) {
-      this._ctx.strokeStyle = "#00FFFF";
+      this._ctx.strokeStyle = '#00FFFF';
     }
     this._ctx.clearRect(this.rect.x - 1, this.rect.y - 1, this.rect.w + 2, this.rect.h + 2);
     this._ctx.strokeRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
