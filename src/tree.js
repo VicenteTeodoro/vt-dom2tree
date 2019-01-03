@@ -5,7 +5,9 @@ import { Parsers, xpath } from './util';
 export default class Tree {
   constructor() {
     this._canvas = document.getElementById('vt-canvas');
-    this._events = {};
+    this._events = {
+      select: []
+    };
     if (!this._canvas) {
       this._canvas = document.createElement('canvas');
       this._canvas.setAttribute('id', 'vt-canvas');
@@ -36,7 +38,6 @@ export default class Tree {
 
   _onClick(evt) {
     let node = null;
-    let events = this._events['select'];
     let box = {
       x: evt.x - this._canvas.getBoundingClientRect().x,
       y: evt.y - this._canvas.getBoundingClientRect().y
@@ -49,12 +50,10 @@ export default class Tree {
     if (node === null) {
       return;
     }
-    if (events) {
-      events.forEach(callback => {
-        callback({ data: node });
-      });
-    }
     this.setRoot(node.el);
+    this._events.select.forEach(callback => {
+      callback({ data: node });
+    });
   }
   setRoot(el) {
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -90,8 +89,9 @@ export default class Tree {
     if (!callback || typeof callback !== 'function') {
       return false;
     }
+    eventName = eventName.toLowerCase();
     if (this._events[eventName] === undefined) {
-      this._events[eventName] = [];
+      return;
     }
     this._events[eventName].push(callback);
   }
