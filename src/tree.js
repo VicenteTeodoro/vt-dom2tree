@@ -5,7 +5,9 @@ import { Parsers, xpath } from './util';
 export default class Tree {
   constructor() {
     this._canvas = document.getElementById('vt-canvas');
-
+    this._events = {
+      select: []
+    };
     if (!this._canvas) {
       this._canvas = document.createElement('canvas');
       this._canvas.setAttribute('id', 'vt-canvas');
@@ -49,6 +51,9 @@ export default class Tree {
       return;
     }
     this.setRoot(node.el);
+    this._events.select.forEach(callback => {
+      callback({ data: node });
+    });
   }
   setRoot(el) {
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -56,7 +61,6 @@ export default class Tree {
     Node.settings = new Settings();
     Tree.nodes.length = 0;
     Node.height = 0;
-
 
     this._root = new Node(Parsers.dom2json(el), null, 0, this._ctx);
 
@@ -77,5 +81,18 @@ export default class Tree {
       this._nodes = [];
     }
     return this._nodes;
+  }
+  on(eventName, callback) {
+    if (!eventName || typeof eventName !== 'string') {
+      return false;
+    }
+    if (!callback || typeof callback !== 'function') {
+      return false;
+    }
+    eventName = eventName.toLowerCase();
+    if (this._events[eventName] === undefined) {
+      return;
+    }
+    this._events[eventName].push(callback);
   }
 }
