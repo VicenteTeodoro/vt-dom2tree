@@ -5,7 +5,7 @@ import { Parsers, xpath } from './util';
 export default class Tree {
   constructor() {
     this._canvas = document.getElementById('vt-canvas');
-
+    this._events = {};
     if (!this._canvas) {
       this._canvas = document.createElement('canvas');
       this._canvas.setAttribute('id', 'vt-canvas');
@@ -36,6 +36,7 @@ export default class Tree {
 
   _onClick(evt) {
     let node = null;
+    let events = this._events['select'];
     let box = {
       x: evt.x - this._canvas.getBoundingClientRect().x,
       y: evt.y - this._canvas.getBoundingClientRect().y
@@ -48,6 +49,11 @@ export default class Tree {
     if (node === null) {
       return;
     }
+    if (events) {
+      events.forEach(callback => {
+        callback({ data: node });
+      });
+    }
     this.setRoot(node.el);
   }
   setRoot(el) {
@@ -56,7 +62,6 @@ export default class Tree {
     Node.settings = new Settings();
     Tree.nodes.length = 0;
     Node.height = 0;
-
 
     this._root = new Node(Parsers.dom2json(el), null, 0, this._ctx);
 
@@ -77,5 +82,17 @@ export default class Tree {
       this._nodes = [];
     }
     return this._nodes;
+  }
+  on(eventName, callback) {
+    if (!eventName || typeof eventName !== 'string') {
+      return false;
+    }
+    if (!callback || typeof callback !== 'function') {
+      return false;
+    }
+    if (this._events[eventName] === undefined) {
+      this._events[eventName] = [];
+    }
+    this._events[eventName].push(callback);
   }
 }
